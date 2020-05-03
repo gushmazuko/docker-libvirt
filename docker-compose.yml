@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  libvirtd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: ${NETWORK_MODE}
+    container_name: libvirtd
+    image: libvirtd:latest
+    hostname: libvirtd
+    restart: always
+    environment:
+      SSH_PORT: ${SSH_PORT}
+      SSH_PUB_KEY: ${SSH_PUB_KEY}
+      SSH_PASSWORD_AUTH: ${SSH_PASSWORD_AUTH}
+      SSH_ROOT_PASSWORD_AUTH: ${SSH_ROOT_PASSWORD_AUTH}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+      - /var/lib/libvirt:/var/lib/libvirt
+      - ./data/qemu:/etc/libvirt/qemu
+    expose:
+      - ${SSH_PORT}
+#    ports:
+#      - ${SSH_PORT}:${SSH_PORT}
+    privileged: true
